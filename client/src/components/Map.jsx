@@ -6,7 +6,7 @@ import "./map.css";
 export default function Map() {
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const tokyo = { lng: 139.753, lat: 35.6844 };
+  const tokyo = { lng: 43.55058213441823, lat: -79.66624725902606 };
   const zoom = 14;
   maptilersdk.config.apiKey = "1Me6Sm6EB6jsGBjnCEL1";
 
@@ -21,9 +21,5 @@ export default function Map() {
     });
   }, [tokyo.lng, tokyo.lat, zoom]);
 
-  return (
-    <div className="map-wrap">
-      <div ref={mapContainer} className="map" />
-    </div>
-  );
+  return <div ref={mapContainer} className="map" />;
 }

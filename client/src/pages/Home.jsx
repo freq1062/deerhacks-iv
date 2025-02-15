@@ -7,9 +7,8 @@ import Map from "../components/Map.jsx";
 
 export default function Home() {
   return (
-    <div style={{ height: "100vh", width: "100%" }}>
-      <h1>Test</h1>
+    <main>
       <Map />
-    </div>
+    </main>
   );
 }
