@@ -11,10 +11,10 @@ const regions = [
       features: [
         {
           type: "Feature",
-          properties: { name: "Null Island" },
+          properties: { name: "Deerfield Hall" },
           geometry: {
             type: "Point",
-            coordinates: [139.753, 35.6844],
+            coordinates: [-79.66620530968332, 43.550466384801396],
           },
         },
       ],
@@ -25,7 +25,7 @@ const regions = [
 export default function Map() {
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const tokyo = { lng: 139.753, lat: 35.6844 };
+  const tokyo = { lat: 43.550466384801396, lng: -79.66620530968332 };
   const zoom = 14;
   maptilersdk.config.apiKey = "1Me6Sm6EB6jsGBjnCEL1";
 
