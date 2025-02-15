@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@maptiler/sdk": "^3.0.1",
+    "axios": "^1.7.9",
     "leaflet": "^1.9.4",
     "react": "^19.0.0-rc.1",
     "react-dom": "^19.0.0-rc.1",
