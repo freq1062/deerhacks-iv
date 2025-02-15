@@ -1,6 +1,6 @@
   .map {
-    position: absolute;
+    position: fixed;
     width: 100%;
-    height: 110%; 
+    height: 105%; 
   }
 /* get rid of the watermarks lmao*/
