@@ -3,21 +3,79 @@ import * as maptilersdk from "@maptiler/sdk";
 import "@maptiler/sdk/dist/maptiler-sdk.css";
 import "./map.css";
 
+const regions = [
+  {
+    type: "geojson",
+    data: {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: { name: "Null Island" },
+          geometry: {
+            type: "Point",
+            coordinates: [139.753, 35.6844],
+          },
+        },
+      ],
+    },
+  },
+];
+
 export default function Map() {
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const tokyo = { lng: 43.55058213441823, lat: -79.66624725902606 };
+  const tokyo = { lng: 139.753, lat: 35.6844 };
   const zoom = 14;
   maptilersdk.config.apiKey = "1Me6Sm6EB6jsGBjnCEL1";
 
   useEffect(() => {
-    if (map.current) return; // stops map from intializing more than once
+    if (map.current) {
+      return;
+    }
 
     map.current = new maptilersdk.Map({
       container: mapContainer.current,
       style: maptilersdk.MapStyle.STREETS,
       center: [tokyo.lng, tokyo.lat],
       zoom: zoom,
+    });
+
+    map.current.on("load", () => {
+      console.log("Map loaded");
+      let counter = 0;
+      for (const regionData of regions) {
+        const sourceId = `region-${counter}`;
+        map.current.addSource(sourceId, regionData);
+        map.current.addLayer({
+          id: `point-${counter}`,
+          source: sourceId,
+          type: "circle",
+          paint: {
+            "circle-radius": 10,
+            "circle-color": "#007cbf",
+            "circle-opacity": 0.5,
+          },
+        });
+        counter += 1;
+        console.log("added source");
+      }
+
+      //then add the layer to the map. Display the "null-island" source data
+
+      map.current.on("zoom", () => {
+        const zoomLevel = map.current.getZoom();
+        const newOpacity = Math.min(0.5, (15 - zoomLevel) / 2); // Opacity decreases as zoom level increases
+
+        // Update the circle layer properties
+        for (var i = 0; i < counter; i++) {
+          map.current.setPaintProperty(
+            `point-${counter}`,
+            "circle-opacity",
+            newOpacity
+          );
+        }
+      });
     });
   }, [tokyo.lng, tokyo.lat, zoom]);
 
