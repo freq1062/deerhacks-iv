@@ -1,22 +1,25 @@
 // deerhacks-iv/client/src/components/LoginForm.jsx
 import React, { useState } from 'react';
+import PropTypes from 'prop-types'; // Add PropTypes for type checking
 
-const LoginForm = () => {
-  const [username, setUsername] = useState('demouser'); // Pre-fill demo username
-  const [password, setPassword] = useState('demopassword'); // Pre-fill demo password
+const LoginForm = ({ onLoginSuccess }) => { // Add onLoginSuccess as a prop
+  const [username, setUsername] = useState('demouser');
+  const [password, setPassword] = useState('demopassword');
   const [message, setMessage] = useState('');
 
-  const handleLogin = (e) => { // **handleLogin is now synchronous (no async/await)**
+  const handleLogin = (e) => {
     e.preventDefault();
     setMessage('');
+    console.log("LoginForm: handleLogin function called");
 
-    // **Static Demo User Check - No fetch call needed**
     if (username === "demouser" && password === "demopassword") {
-      setMessage('Demo Login Successful'); // Success message
-      // In a real app, you'd handle session/token here and redirect
-      // For this static demo, we just show a success message.
+      setMessage('Demo Login Successful');
+      console.log("LoginForm: Demo login successful condition met");
+      onLoginSuccess(); // Now this will work as it's properly passed as a prop
+      console.log("LoginForm: onLoginSuccess() called");
     } else {
-      setMessage('Invalid username or password'); // Failure message
+      setMessage('Invalid username or password');
+      console.log("LoginForm: Demo login failed condition met");
     }
   };
 
@@ -51,6 +54,10 @@ const LoginForm = () => {
       </form>
     </div>
   );
+};
+
+LoginForm.propTypes = {
+  onLoginSuccess: PropTypes.func.isRequired,
 };
 
 const formStyles = { // Re-define formStyles here (or move to a separate styles file and import in both components)
