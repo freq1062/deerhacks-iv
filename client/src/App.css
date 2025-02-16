@@ -13,10 +13,10 @@ nav {
   height: 4.7rem;
   left: 0;
   right: 0;
-  z-index: 50;
+  z-index: 9999;
   background: black; /* Change background to black */
   color: white; /* Change text color to white */
-  border-top: 1px solid white; /* Change the border to white */
+  border-top: 10px solid white; /* Change the border to white */
 }
 
 .link {
@@ -81,6 +81,36 @@ main {
 .leaderboard {
   background: black;
   color: white;
-  text-align: center;
-  margin-left: 6px;
+  text-align: center; /* Centers the text horizontally */
+
+  display: flex;
+  flex-direction: column; /* Ensures items are arranged vertically */
+  justify-content: center; /* Centers vertically */
+  align-items: center; /* Centers horizontally */
+  /* height: 100vh;  */
+  margin-top: -60px;
+}
+
+.leaderboard-table th, .leaderboard-table td {
+  padding: 0.3rem 0.5rem; /* Adjust padding for more space */
+}
+
+.leaderboard-table th:nth-child(1), .leaderboard-table td:nth-child(1) {
+  width: 15%; /* Set a width for the "Rank" column */
+}
+
+.leaderboard-table th:nth-child(2), .leaderboard-table td:nth-child(2) {
+  width: 30%; /* Set a width for the "Player" column */
+}
+
+.leaderboard-table th:nth-child(3), .leaderboard-table td:nth-child(3) {
+  width: 10%; /* Set a width for the "Points" column */
+}
+
+.leaderboard-table th:nth-child(4), .leaderboard-table td:nth-child(4) {
+  width: 10%; /* Set a width for the "Tasks" column */
+}
+
+.leaderboard-table th:nth-child(5), .leaderboard-table td:nth-child(5) {
+  width: 10%; /* Set a width for the "Distance" column */
 }

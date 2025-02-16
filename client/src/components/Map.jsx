@@ -287,7 +287,10 @@ export default function Paths() {
           return; // Skip the current iteration if it's the unexplored paths layer
         }
         if (layer.id && layer.type === "line") {
+          // THIS LINE BELOW MAKES IT BLUE
           map.current.setPaintProperty(layer.id, "line-color", "#678fcf");
+          // THIS IS THE RED LINE
+          //map.current.setPaintProperty(layer.id, "line-color", "#FF0000");
           map.current.setPaintProperty(layer.id, "line-width", 2);
         }
       });
