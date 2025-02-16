@@ -129,11 +129,6 @@ export default function Paths() {
   let pathList = [];
   let pointList = {};
 
-  let allPoints = [];
-  let allLines = [];
-  let pathList = [];
-  let pointList = {};
-
   useEffect(() => {
     if (map.current) {
       return;
@@ -313,7 +308,10 @@ export default function Paths() {
       };
 
       if (user.isLoggedIn) {
-        updateUserLocation(score.current);
+        for (var point of visitedPoints) {
+          updateUserLocation(point);
+        }
+        console.log(user);
       }
 
       const visitedPointsGeoJSON = {
