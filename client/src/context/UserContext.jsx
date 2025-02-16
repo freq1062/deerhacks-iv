@@ -61,7 +61,6 @@ export const UserProvider = ({ children }) => {
     setUser((prevUser) => {
       const distance = calculateDistance(prevUser.lastLocation, newLocation);
       const newTotalDistance = prevUser.totalDistance + distance;
-      console.log(newTotalDistance);
 
       return {
         ...prevUser,

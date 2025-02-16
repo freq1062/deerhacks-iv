@@ -178,6 +178,9 @@ export default function Paths() {
 
       // RENDER POIS
       locations.forEach((location) => {
+        if (user.visitedLocations == location.name) {
+          location.completed = true;
+        }
         // Create a custom HTML element for the marker.
         const markerElement = document.createElement("div");
         markerElement.className = "custom-marker";
@@ -188,7 +191,7 @@ export default function Paths() {
         markerElement.style.borderRadius = "50%";
         markerElement.style.border = location.completed
           ? "2px solid lime"
-          : "2px solid lime";
+          : "2px solid red";
 
         // Create a popup that shows the location's name
         const popupContent = document.createElement("div");
@@ -306,13 +309,6 @@ export default function Paths() {
           properties: {},
         })),
       };
-
-      if (user.isLoggedIn) {
-        for (var point of visitedPoints) {
-          updateUserLocation(point);
-        }
-        console.log(user);
-      }
 
       const visitedPointsGeoJSON = {
         //idk how to show the points, nothing worked
@@ -489,6 +485,7 @@ export default function Paths() {
 
           // Only add the point if it's unique
           if (!pointExists) {
+            updateUserLocation(newPoint);
             return [...prevVisitedPoints, newPoint];
           } else {
             return prevVisitedPoints; // No change if the point is not unique

@@ -28,7 +28,10 @@ export default function NavBar() {
             Leaderboard
           </Link>
         </div>
-        <ProfileMenu userData={mockUserData} />
+        <div className="user-info">
+          <ProfileMenu userData={mockUserData} />
+          <p>Score: 10</p>
+        </div>
       </div>
     </nav>
   );

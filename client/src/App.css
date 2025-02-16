@@ -54,3 +54,9 @@ nav {
 main {
   padding-bottom: 4rem;
 }
+
+.user-info {
+  display: flex;
+  align-items: center; /* Vertically align the items (optional) */
+  gap: 10px; /* Optional: space between the items */
+}
