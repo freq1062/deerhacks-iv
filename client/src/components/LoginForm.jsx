@@ -64,6 +64,7 @@ const styles = {
   },
   inputGroup: {
     marginBottom: '1rem',
+    marginRight: '1rem',
   },
   label: {
     display: 'block',

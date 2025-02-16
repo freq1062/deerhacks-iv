@@ -4,6 +4,8 @@ import LoginForm from "../components/LoginForm.jsx";
 import Map from "../components/Map.jsx";
 import { PathProvider } from "../components/PathProvider.jsx";
 import { useUser } from "../context/UserContext.jsx";
+import RealPG_logo from "../assets/RealPG_logo.png";
+import Login_BG from "../assets/Login_BG.jpg";
 
 export default function Home() {
   const { user } = useUser();
@@ -12,7 +14,8 @@ export default function Home() {
     <div style={styles.container}>
       {!user.isLoggedIn ? (
         <div style={styles.authContainer}>
-          <h1 style={styles.title}>Real Playing Game</h1>
+          <img style={styles.logo} src={RealPG_logo}></img>
+          {/* <h2 style={styles.title}>Real-Playing Game</h2> */}
           <div style={styles.formsContainer}>
             <LoginForm />
             <RegisterForm />
@@ -31,6 +34,11 @@ export default function Home() {
   );
 }
 const styles = {
+  logo: {
+    width: "150px",
+    height: "150px",
+    marginBottom: "1rem",
+  },
   container: {
     width: "100%",
     height: "100vh",
@@ -44,8 +52,11 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#f5f5f5",
-    padding: "20px",
+    backgroundImage: `url(${Login_BG})`,
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    padding: "10px",
   },
   title: {
     marginBottom: "2rem",
