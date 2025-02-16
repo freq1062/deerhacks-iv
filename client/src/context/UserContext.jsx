@@ -37,6 +37,7 @@ export const UserProvider = ({ children }) => {
       lastLocation: [43.549455, -79.66391],
       totalDistance: 0,
       points: 0,
+      completion: 0,
       visitedLocations: [],
     };
   };
@@ -75,11 +76,11 @@ export const UserProvider = ({ children }) => {
     });
   };
 
-  const addScore = (score) => {
+  const setPercentage = (score) => {
     setUser((prevUser) => {
       return {
         ...prevUser,
-        points: prevUser.points + score,
+        completion: score,
       };
     });
   };
@@ -139,6 +140,7 @@ export const UserProvider = ({ children }) => {
       lastLocation: null,
       totalDistance: 0,
       points: 0,
+      completion: 0,
       visitedLocations: [],
     });
   };
@@ -150,7 +152,7 @@ export const UserProvider = ({ children }) => {
     updateUserLocation,
     completeTask,
     addVisitedLocation,
-    addScore,
+    setPercentage,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

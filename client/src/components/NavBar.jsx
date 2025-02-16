@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ProfileMenu from "./ProfileMenu";
+import { useUser } from "../context/UserContext";
 
 export default function NavBar() {
+  const { user } = useUser();
   // Mock user data for testing
   const mockUserData = {
     username: "demouser",
@@ -30,7 +32,7 @@ export default function NavBar() {
         </div>
         <div className="user-info">
           <ProfileMenu userData={mockUserData} />
-          <p>Score: 10</p>
+          <p>Score: {user.completion}%</p>
         </div>
       </div>
     </nav>

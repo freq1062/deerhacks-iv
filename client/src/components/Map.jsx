@@ -122,7 +122,7 @@ export default function Paths() {
     setUnexploredLines,
   } = usePaths();
   const [score, setScore] = useState({ total: 0, current: 0 });
-  const { user, updateUserLocation } = useUser();
+  const { user, updateUserLocation, setPercentage } = useUser();
 
   let allPoints = [];
   let allLines = [];
@@ -297,6 +297,10 @@ export default function Paths() {
   }, [zoom]);
 
   useEffect(() => {
+    setPercentage(Math.round((score.current / score.total) * 100));
+  }, [score]);
+
+  useEffect(() => {
     if (visitedLines.length > 0) {
       const pathGeoJSON = {
         type: "FeatureCollection",
@@ -437,10 +441,6 @@ export default function Paths() {
     }
     setScore((prevScore) => ({ ...prevScore, current: visitedPoints.length }));
   }, [unexploredLines, visitedLines, visitedPoints]);
-
-  useEffect(() => {
-    console.log(score);
-  }, [score]);
 
   function haversineDistance(coord1, coord2) {
     const [lat1, lon1] = coord1;
