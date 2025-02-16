@@ -1,6 +1,4 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-const fs = require('fs');
-const path = require('path');
 
 async function compareImages(img1, img2) {
   try {
@@ -30,11 +28,14 @@ async function compareImages(img1, img2) {
   }
 }
 
+module.exports = { compareImages };
+
 // Test
+// const fs = require('fs');
+// const path = require('path');
 // const img1Path = path.join(__dirname, '../assets/CCT_Art.jpg');
 // const img1Base64 = fs.readFileSync(img1Path, { encoding: 'base64' });
 // const img2Path = path.join(__dirname, '../assets/CCT_Ice_cream.jpg');
 // const img2Base64 = fs.readFileSync(img2Path, { encoding: 'base64' });
 // compareImages(img1Base64, img2Base64).then(console.log);
 
-module.exports = { compareImages };
