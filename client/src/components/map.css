@@ -1,7 +1,7 @@
 .map {
   position: absolute;  /* Change from fixed to absolute */
   width: 100%;
-  height: calc(100vh - 64px);  /* Subtract navbar height */
+  height: 105%;
   top: 0;
   left: 0;
 }
