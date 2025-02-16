@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import * as maptilersdk from "@maptiler/sdk";
 import "@maptiler/sdk/dist/maptiler-sdk.css";
 import "./map.css";
+import { usePaths } from "./PathProvider";
 
 import SpeechBubble1 from "../assets/SpeechBubble1.jpeg";
 import MN_Staircase from "../assets/MN_Staircase.jpg";
@@ -111,9 +112,14 @@ export default function Paths() {
   const zoom = 14;
   const userLocation = useRef(null);
   maptilersdk.config.apiKey = "1Me6Sm6EB6jsGBjnCEL1";
-  const [visitedLines, setVisitedLines] = useState([]);
-  const [visitedPoints, setVisitedPoints] = useState([]);
-  const [unexploredLines, setUnexploredLines] = useState([]);
+  const {
+    visitedLines,
+    setVisitedLines,
+    visitedPoints,
+    setVisitedPoints,
+    unexploredLines,
+    setUnexploredLines,
+  } = usePaths();
   const [score, setScore] = useState({ total: 0, current: 0 });
 
   let allPoints = [];
@@ -134,6 +140,7 @@ export default function Paths() {
     });
 
     map.current.on("load", () => {
+      // if (map.current) {
       console.log("Map loaded");
       let counter = 0;
       for (const regionData of regions) {
@@ -186,7 +193,7 @@ export default function Paths() {
         popupContent.innerHTML = `
           <div>
             <h3>${location.name}</h3>
-            <button id="goToCameraButton">Go to Camera</button>
+            <a href="/camera">Go to Camera</a>
           </div>
           `;
         const popup = new maptilersdk.Popup({ offset: 25 }).setDOMContent(

@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 async function compareImages(img1, img2) {
+  console.log("Comparing images...");
   try {
     const genAI = new GoogleGenerativeAI("AIzaSyAv2-pANo_3rsik3WZrneXK0bc_LtWPaV4");
     const model = await genAI.getGenerativeModel({ model: "gemini-2.0-flash" });

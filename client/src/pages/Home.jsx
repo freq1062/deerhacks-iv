@@ -2,6 +2,7 @@ import React from "react";
 import RegisterForm from "../components/RegisterForm.jsx";
 import LoginForm from "../components/LoginForm.jsx";
 import Map from "../components/Map.jsx";
+import { PathProvider } from "../components/PathProvider.jsx";
 import { useUser } from "../context/UserContext.jsx";
 
 export default function Home() {
@@ -19,7 +20,9 @@ export default function Home() {
         </div>
       ) : (
         <div style={styles.mapWrapper}>
-          <Map />
+          <PathProvider>
+            <Map />
+          </PathProvider>
         </div>
       )}
     </div>
