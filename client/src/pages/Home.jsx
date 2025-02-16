@@ -1,7 +1,8 @@
 import React from "react";
 import RegisterForm from "../components/RegisterForm.jsx";
 import LoginForm from "../components/LoginForm.jsx";
-import Map from "../components/Map.jsx";
+import Map from "../components/Paths.jsx";
+import Paths from "../components/Paths.jsx";
 import { useUser } from "../context/UserContext.jsx";
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
       ) : (
         <div style={styles.mapWrapper}>
           <Map />
+          <Paths />
         </div>
       )}
     </div>
@@ -28,35 +30,35 @@ export default function Home() {
 
 const styles = {
   container: {
-    width: '100%',
-    height: '100vh',
-    overflow: 'hidden',
+    width: "100%",
+    height: "100vh",
+    overflow: "hidden",
   },
   authContainer: {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f5f5f5',
-    padding: '20px',
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#f5f5f5",
+    padding: "20px",
   },
   title: {
-    marginBottom: '2rem',
-    color: '#333',
-    textAlign: 'center',
+    marginBottom: "2rem",
+    color: "#333",
+    textAlign: "center",
   },
   formsContainer: {
-    display: 'flex',
-    gap: '2rem',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    maxWidth: '1200px',
+    display: "flex",
+    gap: "2rem",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    maxWidth: "1200px",
   },
   mapWrapper: {
-    width: '100%',
-    height: '100%',
-    position: 'relative',
-  }
+    width: "100%",
+    height: "100%",
+    position: "relative",
+  },
 };

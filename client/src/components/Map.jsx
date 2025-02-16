@@ -16,8 +16,6 @@ import Library_Starbucks from "../assets/Library_Starbucks.jpg";
 import SmokeTower1 from "../assets/SmokeTower1.jpeg";
 import utmdh from "../assets/utmdh.jpeg";
 
-
-
 const regions = [
   {
     type: "geojson",
@@ -41,7 +39,7 @@ const locations = [
   {
     name: "Speech Bubble",
     // Coordinates are given as [lat, lng] (we’ll swap them later)
-    coordinates: [43.548458, -79.661960],
+    coordinates: [43.548458, -79.66196],
     image: SpeechBubble1,
     completed: false,
   },
@@ -77,7 +75,7 @@ const locations = [
   },
   {
     name: "The Health Sciences Building",
-    coordinates: [43.549560,-79.662334],
+    coordinates: [43.54956, -79.662334],
     image: HealthSciences4,
     completed: false,
   },
@@ -188,7 +186,9 @@ export default function Map() {
         markerElement.style.height = "50px";
         markerElement.style.backgroundSize = "cover";
         markerElement.style.borderRadius = "50%";
-        markerElement.style.border = location.completed ? "2px solid lime" : "2px solid lime";
+        markerElement.style.border = location.completed
+          ? "2px solid lime"
+          : "2px solid lime";
 
         // Create a popup that shows the location's name
         const popupContent = document.createElement("div");
@@ -198,7 +198,9 @@ export default function Map() {
             <button id="goToCameraButton">Go to Camera</button>
           </div>
           `;
-        const popup = new maptilersdk.Popup({ offset: 25 }).setDOMContent(popupContent);
+        const popup = new maptilersdk.Popup({ offset: 25 }).setDOMContent(
+          popupContent
+        );
 
         // Note: The coordinates array is [lat, lng], so we swap the order to [lng, lat]
         new maptilersdk.Marker({ element: markerElement })
