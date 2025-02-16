@@ -41,69 +41,13 @@ const locations = [
   {
     name: "Speech Bubble",
     // Coordinates are given as [lat, lng] (we’ll swap them later)
-    coordinates: [43.548462, -79.661969],
+    coordinates: [43.560466, -79.650205],
     image: SpeechBubble1,
-    completed: false,
   },
   {
-    name: "Maanjiwe nendamowinan staircase",
-    coordinates: [43.551170, -79.665823],
+    name: "MN Staircase",
+    coordinates: [43.562466, -79.655205],
     image: MN_Staircase,
-    completed: false,
-  },
-  {
-    name: "The Blind Duck",
-    coordinates: [43.548823, -79.663893],
-    image: BlindDuck1,
-    completed: false,
-  },
-  {
-    name: "Found in the Forest (Art)",
-    coordinates: [43.549436, -79.662721],
-    image: CCT_Art,
-    completed: false,
-  },
-  {
-    name: "Erindale",
-    coordinates: [43.549719, -79.665687],
-    image: Erindale,
-    completed: false,
-  },
-  {
-    name: "IB100",
-    coordinates: [43.551459, -79.663629],
-    image: IB110,
-    completed: false,
-  },
-  {
-    name: "The Health Sciences Building",
-    coordinates: [43.549560,-79.662334],
-    image: HealthSciences4,
-    completed: false,
-  },
-  {
-    name: "The CCT Ice Cream Machine",
-    coordinates: [43.549579, -79.663302],
-    image: IceCreamMachine1,
-    completed: false,
-  },
-  {
-    name: "Library Starbucks",
-    coordinates: [43.551016, -79.663082],
-    image: Library_Starbucks,
-    completed: false,
-  },
-  {
-    name: "Smoke Tower",
-    coordinates: [43.551823, -79.662266],
-    image: SmokeTower1,
-    completed: false,
-  },
-  {
-    name: "Deerfield Hall",
-    coordinates: [43.550264, -79.666003],
-    image: utmdh,
-    completed: false,
   },
 ];
 
@@ -115,7 +59,9 @@ export default function Map() {
   maptilersdk.config.apiKey = "1Me6Sm6EB6jsGBjnCEL1";
 
   useEffect(() => {
-    if (map.current) return;
+    if (map.current) {
+      return;
+    }
 
     map.current = new maptilersdk.Map({
       container: mapContainer.current,
@@ -140,24 +86,36 @@ export default function Map() {
             "circle-opacity": 0.5,
           },
         });
-        counter++;
-        console.log("Added region source");
+        counter += 1;
+        console.log("added source");
       }
+
+      //then add the layer to the map. Display the "null-island" source data
 
       map.current.on("zoom", () => {
         const zoomLevel = map.current.getZoom();
-        const newOpacity = Math.min(0.5, (15 - zoomLevel) / 2);
-        for (let i = 0; i < counter; i++) {
-          map.current.setPaintProperty(`point-${i}`, "circle-opacity", newOpacity);
+        const newOpacity = Math.min(0.5, (15 - zoomLevel) / 2); // Opacity decreases as zoom level increases
+
+        // Update the circle layer properties
+        for (var i = 0; i < counter; i++) {
+          map.current.setPaintProperty(
+            `point-${counter}`,
+            "circle-opacity",
+            newOpacity
+          );
         }
       });
 
-      // Optionally adjust other layer styles
       map.current.getStyle().layers.forEach((layer) => {
+        // Log all of the layer ids so that we can adjust which get displayed
+        // console.log("Layer ids:", layer.id);
+        // Only adjust layers that are drawn as lines
         if (layer.id && layer.type === "line") {
+          // For larger roads, check for "road" in the ID and set red
           if (layer.id.includes("road") && !layer.id.includes("Path")) {
             map.current.setPaintProperty(layer.id, "line-color", "#FF0000");
           }
+          // For smaller paths, check for "path" in the ID and set blue
           if (layer.id.includes("Path")) {
             map.current.setPaintProperty(layer.id, "line-color", "#0000FF");
           }
@@ -174,11 +132,11 @@ export default function Map() {
         markerElement.style.height = "50px";
         markerElement.style.backgroundSize = "cover";
         markerElement.style.borderRadius = "50%";
-        markerElement.style.border = location.completed ? "2px solid lime" : "2px solid white";
-      
+        markerElement.style.border = "2px solid white";
+
         // Create a popup that shows the location's name
         const popup = new maptilersdk.Popup({ offset: 25 }).setText(location.name);
-      
+
         // Note: The coordinates array is [lat, lng], so we swap the order to [lng, lat]
         new maptilersdk.Marker({ element: markerElement })
           .setLngLat([location.coordinates[1], location.coordinates[0]])

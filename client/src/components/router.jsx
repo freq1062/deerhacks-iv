@@ -17,17 +17,16 @@ export default function Router() {
   };
 
   return (
-    <>
-      <BrowserRouter>
+    <BrowserRouter>
+      <div style={{ width: '100%', height: '100vh' }}>
         <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/camera" element={<Camera />} />
-            <Route path="/tasks" element={<TaskDisplay />} />
-            <Route path="/leaderboard" element={<Leaderboard />} />
-          </Route>
+          <Route path="/" element={<Home />} />
+          <Route path="/camera" element={<Camera />} />
+          <Route path="/tasks" element={<TaskDisplay />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
         </Routes>
-      </BrowserRouter>
-    </>
+        <NavBar />
+      </div>
+    </BrowserRouter>
   );
 }
