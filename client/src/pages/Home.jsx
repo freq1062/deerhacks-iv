@@ -4,8 +4,10 @@ import LoginForm from "../components/LoginForm.jsx";
 import Map from "../components/Map.jsx";
 import { PathProvider } from "../components/PathProvider.jsx";
 import { useUser } from "../context/UserContext.jsx";
+
 export default function Home() {
   const { user } = useUser();
+
   return (
     <div style={styles.container}>
       {!user.isLoggedIn ? (
@@ -32,6 +34,7 @@ const styles = {
   container: {
     width: "100%",
     height: "100vh",
+    position: "relative",
     overflow: "hidden",
   },
   authContainer: {
