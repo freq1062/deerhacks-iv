@@ -1,23 +1,30 @@
 import React, { useState } from 'react';
-import { User, MapPin, Award, ChevronDown } from 'lucide-react';
+import { User, MapPin, Award, ChevronDown, LogOut } from 'lucide-react';
+import { useUser } from '../context/UserContext';
 
-const ProfileMenu = ({ userData }) => {
+const ProfileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, logout } = useUser();
 
   // Calculate statistics based on completed tasks
   const calculateStats = () => {
-    const completedTasks = userData.tasks?.filter(task => task.isCompleted) || [];
-    const points = completedTasks.length * 100;
-    const distance = userData.totalDistance || 0;
+    const completedTasks = user.tasks?.filter(task => task.isCompleted) || [];
+    const points = user.points || 0;
+    const distance = user.totalDistance || 0;
     
     return {
       points,
-      locationsFound: completedTasks.length,
+      locationsFound: user.visitedLocations?.length || 0,
       distanceTraveled: distance,
     };
   };
 
   const stats = calculateStats();
+
+  const handleLogout = () => {
+    logout();
+    setIsOpen(false);
+  };
 
   return (
     <div className="relative" style={{ zIndex: 1000 }}>
@@ -27,7 +34,7 @@ const ProfileMenu = ({ userData }) => {
         style={{ minWidth: '120px' }}
       >
         <User size={20} />
-        <span>{userData.username || 'Profile'}</span>
+        <span>{user.username || 'Profile'}</span>
         <ChevronDown 
           size={16} 
           className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`}
@@ -41,7 +48,7 @@ const ProfileMenu = ({ userData }) => {
         >
           <div className="space-y-4">
             <div className="text-lg font-semibold border-b pb-2">
-              {userData.username || 'User Profile'}
+              {user.username || 'User Profile'}
             </div>
             
             <div className="space-y-3">
@@ -79,6 +86,16 @@ const ProfileMenu = ({ userData }) => {
                 </div>
               </div>
             </div>
+
+            {user.isLoggedIn && (
+              <button
+                onClick={handleLogout}
+                className="w-full mt-3 flex items-center justify-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+              >
+                <LogOut size={16} />
+                <span>Logout</span>
+              </button>
+            )}
           </div>
         </div>
       )}

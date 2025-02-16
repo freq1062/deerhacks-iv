@@ -1,22 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import RegisterForm from "../components/RegisterForm.jsx";
 import LoginForm from "../components/LoginForm.jsx";
 import Map from "../components/Map.jsx";
+import { useUser } from "../context/UserContext.jsx";
 
 export default function Home() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const handleLoginSuccess = () => {
-    setIsLoggedIn(true);
-  };
+  const { user } = useUser();
 
   return (
     <div style={styles.container}>
-      {!isLoggedIn ? (
+      {!user.isLoggedIn ? (
         <div style={styles.authContainer}>
           <h1 style={styles.title}>Real Playing Game</h1>
           <div style={styles.formsContainer}>
-            <LoginForm onLoginSuccess={handleLoginSuccess} />
+            <LoginForm />
             <RegisterForm />
           </div>
         </div>

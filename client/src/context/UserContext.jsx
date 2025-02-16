@@ -21,15 +21,29 @@ const calculateDistance = (coord1, coord2) => {
 };
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState({
-    username: '',
-    isLoggedIn: false,
-    tasks: [],
-    lastLocation: null,
-    totalDistance: 0,
-    points: 0,
-    visitedLocations: [],
-  });
+  // Try to load user data from localStorage
+  const loadUserFromStorage = () => {
+    const savedUser = localStorage.getItem('userData');
+    if (savedUser) {
+      return JSON.parse(savedUser);
+    }
+    return {
+      username: '',
+      isLoggedIn: false,
+      tasks: [],
+      lastLocation: null,
+      totalDistance: 0,
+      points: 0,
+      visitedLocations: [],
+    };
+  };
+
+  const [user, setUser] = useState(loadUserFromStorage);
+
+  // Save user data to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('userData', JSON.stringify(user));
+  }, [user]);
 
   // Calculate points based on various factors
   const calculatePoints = (completedTasks, totalDistance, visitedLocations) => {
@@ -105,6 +119,7 @@ export const UserProvider = ({ children }) => {
 
   // Handle user logout
   const logout = () => {
+    localStorage.removeItem('userData'); // Clear the stored user data
     setUser({
       username: '',
       isLoggedIn: false,
