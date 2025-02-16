@@ -3,23 +3,26 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  font-family: 'Roboto', sans-serif;
 }
 
 nav {
   position: fixed;
   bottom: 0;
+  height: 4.7rem;
   left: 0;
   right: 0;
   z-index: 50;
-  background: white;
-  border-top: 1px solid #e5e7eb;
+  background: black; /* Change background to black */
+  color: white; /* Change text color to white */
+  border-top: 1px solid white; /* Change the border to white */
 }
 
 .link {
-  color: black;
+  color: white; /* Links in nav are now white */
   text-decoration: none;
   padding: 0.5rem;
-  transition: color 0.2s
+  transition: color 0.2s;
 }
 
 .link:hover {
@@ -28,24 +31,26 @@ nav {
 
 /* Profile menu styles */
 .profile-menu {
-  position: relative;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, -100%);
   display: inline-block;
 }
 
 .profile-menu button {
   background: none;
-  border: none;
+  border: white solid 1px; /* Outline color white */
   cursor: pointer;
-  display: flex;
-  align-items: center;
   gap: 0.5rem;
   padding: 0.5rem;
   border-radius: 0.375rem;
+  color: white; /* Button text is white */
   transition: background-color 0.2s;
 }
 
 .profile-menu button:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
 }
 
 .profile-menu-dropdown {
@@ -57,16 +62,17 @@ nav {
 
 /* Ensure content doesn't get hidden behind the navbar */
 main {
-  padding-bottom: 4rem;
+  padding-bottom: 5rem; /* Increase padding if necessary */
 }
 
 .user-info {
+  background: black;
   display: flex;
-  align-items: center; /* Vertically align the items (optional) */
-  gap: 10px; /* Optional: space between the items */
+  align-items: center; /* Vertically align the items */
+  gap: 10px; /* Space between items */
 }
 
 .relative {
   position: relative;
-  z-index: 51;
+  z-index: 51; /* Ensure elements appear on top of the navbar */
 }
