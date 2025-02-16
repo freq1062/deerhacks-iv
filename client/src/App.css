@@ -1,36 +1,56 @@
-html, body {
+/* Base styles */
+body {
   margin: 0;
-  height: 100%;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Navigation styles */
+nav {
   display: flex;
-  flex-direction: column;
-  color: black;
-  font-family: 'Roboto', sans-serif;
-}
-
-a {
-  color: white;
-  text-decoration: none;
-}
-
-.navbar {
+  justify-content: space-evenly; /* Equal spacing between items */
+  align-items: center;
+  margin: 0;
+  padding: 0.5rem 10px;
+  background-color: white;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   position: fixed;
   bottom: 0;
-  width: 100%;
-  height: 10vh;
-  color: white; 
-  background-color: black; 
-  text-decoration: none;
-  z-index: 1000; 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 10px; 
-  box-sizing: border-box; /* Ensure padding is included in the height */
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
 
-.map-container {
-  flex-grow: 1;
+
+.link {
+  color: black;
+  text-decoration: none;
+  padding: 0.5rem;
+}
+
+/* Profile menu styles */
+.profile-menu {
   position: relative;
-  width: 100%;
-  height: 85vh; /* Adjust the height so other elements are visible */
+  display: inline-block;
+}
+
+.profile-menu button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  transition: background-color 0.2s;
+}
+
+.profile-menu button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Ensure content doesn't get hidden behind the navbar */
+main {
+  padding-bottom: 4rem;
 }
