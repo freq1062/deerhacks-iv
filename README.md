@@ -1,4 +1,3 @@
-# deerhacks-iv
 # Real-Playing Game (Deerhacks IV Project)
 
 ## Inspiration
