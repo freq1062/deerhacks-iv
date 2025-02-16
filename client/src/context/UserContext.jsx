@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import tasksData from '../data/tasks';
 
 // Create the context
 const UserContext = createContext();
@@ -98,7 +99,7 @@ export const UserProvider = ({ children }) => {
       ...prevUser,
       username,
       isLoggedIn: true,
-      tasks: [], // Initialize with tasks from your data
+      tasks: tasksData, // Initialize with tasks from your data
     }));
   };
 

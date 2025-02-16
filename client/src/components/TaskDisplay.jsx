@@ -27,27 +27,31 @@ const TaskDisplay = () => {
         <p>Locations Found: {user.visitedLocations.length}</p>
       </div>
       <ul style={taskDisplayStyles.taskList}>
-        {user.tasks.map(task => (
-          <li key={task.id} style={{
-            ...taskDisplayStyles.taskItem,
-            textDecoration: task.isCompleted ? 'line-through' : 'none',
-            opacity: task.isCompleted ? 0.7 : 1,
-          }}>
-            <label style={taskDisplayStyles.taskLabel}>
-              <input
-                type="checkbox"
-                checked={task.isCompleted}
-                onChange={() => handleTaskCompletion(task.id)}
-                style={taskDisplayStyles.taskCheckbox}
-              />
-              <span>
-                <strong>{task.locationName}:</strong> {task.description}
-                <br />
-                <small>Type: {task.taskType}</small>
-              </span>
-            </label>
-          </li>
-        ))}
+        {user.tasks.length > 0 ? (
+          user.tasks.map(task => (
+            <li key={task.id} style={{
+              ...taskDisplayStyles.taskItem,
+              textDecoration: task.isCompleted ? 'line-through' : 'none',
+              opacity: task.isCompleted ? 0.7 : 1,
+            }}>
+              <label style={taskDisplayStyles.taskLabel}>
+                <input
+                  type="checkbox"
+                  checked={task.isCompleted}
+                  onChange={() => handleTaskCompletion(task.id)}
+                  style={taskDisplayStyles.taskCheckbox}
+                />
+                <span>
+                  <strong>{task.locationName}:</strong> {task.description}
+                  <br />
+                  <small>Type: {task.taskType}</small>
+                </span>
+              </label>
+            </li>
+          ))
+        ) : (
+          <li style={taskDisplayStyles.taskItem}>No tasks available. Please log in to see tasks.</li>
+        )}
       </ul>
     </div>
   );

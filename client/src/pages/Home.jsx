@@ -14,7 +14,7 @@ export default function Home() {
     <div style={styles.container}>
       {!isLoggedIn ? (
         <div style={styles.authContainer}>
-          <h1 style={styles.title}>Welcome to Location Discovery</h1>
+          <h1 style={styles.title}>Real Playing Game</h1>
           <div style={styles.formsContainer}>
             <LoginForm onLoginSuccess={handleLoginSuccess} />
             <RegisterForm />
