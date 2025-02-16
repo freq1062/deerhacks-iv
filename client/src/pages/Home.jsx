@@ -19,11 +19,13 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        <div style={styles.mapWrapper}>
-          <PathProvider>
-            <Map />
-          </PathProvider>
-        </div>
+        <>
+          <div style={styles.mapWrapper}>
+            <PathProvider>
+              <Map />
+            </PathProvider>
+          </div>
+        </>
       )}
     </div>
   );

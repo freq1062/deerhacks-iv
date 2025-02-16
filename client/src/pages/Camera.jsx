@@ -69,7 +69,7 @@ export default function Camera({ onPhotoTaken }) {
         // Create a new promise for each image comparison
         let promise = compareImages(
           base64Images[i].split(",")[1],
-          base64Images[i].split(",")[1]
+          base64Images[i].split(",")[1] // same picture
         ).then((result) => {
           if (result) {
             foundItems.push(found[i - 1]); // Store found item if the result is true
