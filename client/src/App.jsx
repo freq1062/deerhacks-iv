@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Router from "./components/router.jsx";
+import { UserProvider } from "./context/UserContext";
 import "./App.css";
 
 function App() {
   return (
-    <>
+    <UserProvider>
       <Router />
-    </>
+    </UserProvider>
   );
 }
 

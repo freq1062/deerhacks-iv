@@ -1,34 +1,37 @@
 // deerhacks-iv/client/src/components/TaskDisplay.jsx
-import React, { useState } from 'react';
-import tasksData from '../data/tasks'; // Import task data
+import React from 'react';
+import { useUser } from '../context/UserContext';
+import tasksData from '../data/tasks';
 
 const TaskDisplay = () => {
-  // State to manage tasks (including completion status)
-  const [tasks, setTasks] = useState(() => {
-    // Initialize tasks state from tasksData, setting isCompleted to false if not present
-    return tasksData.map(task => ({ ...task, isCompleted: task.isCompleted || false }));
-  });
+  const { user, completeTask } = useUser();
 
-  // Function to handle task completion toggle
+  // Initialize tasks if they haven't been loaded yet
+  React.useEffect(() => {
+    if (user.tasks.length === 0 && user.isLoggedIn) {
+      // In a real app, you might fetch tasks from an API here
+      completeTask(tasksData);
+    }
+  }, [user.isLoggedIn]);
+
   const handleTaskCompletion = (taskId) => {
-    const updatedTasks = tasks.map(task => {
-      if (task.id === taskId) {
-        return { ...task, isCompleted: !task.isCompleted }; // Toggle isCompleted status
-      }
-      return task;
-    });
-    setTasks(updatedTasks); // Update the tasks state
+    completeTask(taskId);
   };
 
   return (
     <div style={taskDisplayStyles.container}>
       <h3 style={taskDisplayStyles.heading}>Current Tasks</h3>
+      <div style={taskDisplayStyles.stats}>
+        <p>Total Points: {user.points}</p>
+        <p>Distance Traveled: {user.totalDistance.toFixed(1)} km</p>
+        <p>Locations Found: {user.visitedLocations.length}</p>
+      </div>
       <ul style={taskDisplayStyles.taskList}>
-        {tasks.map(task => (
+        {user.tasks.map(task => (
           <li key={task.id} style={{
             ...taskDisplayStyles.taskItem,
-            textDecoration: task.isCompleted ? 'line-through' : 'none', // Strikethrough for completed tasks
-            opacity: task.isCompleted ? 0.7 : 1, // Fade out completed tasks
+            textDecoration: task.isCompleted ? 'line-through' : 'none',
+            opacity: task.isCompleted ? 0.7 : 1,
           }}>
             <label style={taskDisplayStyles.taskLabel}>
               <input
@@ -82,6 +85,12 @@ const taskDisplayStyles = {
   taskCheckbox: {
     marginRight: '8px',
     cursor: 'pointer',
+  },
+  stats: {
+    backgroundColor: '#f8f9fa',
+    padding: '10px',
+    borderRadius: '4px',
+    marginBottom: '15px',
   },
 };
 
