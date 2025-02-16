@@ -6,6 +6,17 @@ import "./map.css";
 // Import local images
 import SpeechBubble1 from "../assets/SpeechBubble1.jpeg";
 import MN_Staircase from "../assets/MN_Staircase.jpg";
+import BlindDuck1 from "../assets/BlindDuck1.jpeg";
+import CCT_Art from "../assets/CCT_Art.jpg";
+import Erindale from "../assets/Erindale.jpeg";
+import IB110 from "../assets/IB110.jpg";
+import HealthSciences4 from "../assets/HealthSciences4.jpeg";
+import IceCreamMachine1 from "../assets/IceCreamMachine1.jpeg";
+import Library_Starbucks from "../assets/Library_Starbucks.jpg";
+import SmokeTower1 from "../assets/SmokeTower1.jpeg";
+import utmdh from "../assets/utmdh.jpeg";
+
+
 
 const regions = [
   {
@@ -30,13 +41,69 @@ const locations = [
   {
     name: "Speech Bubble",
     // Coordinates are given as [lat, lng] (we’ll swap them later)
-    coordinates: [43.560466, -79.650205],
+    coordinates: [43.548462, -79.661969],
     image: SpeechBubble1,
+    completed: false,
   },
   {
-    name: "MN Staircase",
-    coordinates: [43.562466, -79.655205],
+    name: "Maanjiwe nendamowinan staircase",
+    coordinates: [43.551170, -79.665823],
     image: MN_Staircase,
+    completed: false,
+  },
+  {
+    name: "The Blind Duck",
+    coordinates: [43.548823, -79.663893],
+    image: BlindDuck1,
+    completed: false,
+  },
+  {
+    name: "Found in the Forest (Art)",
+    coordinates: [43.549436, -79.662721],
+    image: CCT_Art,
+    completed: false,
+  },
+  {
+    name: "Erindale",
+    coordinates: [43.549719, -79.665687],
+    image: Erindale,
+    completed: false,
+  },
+  {
+    name: "IB100",
+    coordinates: [43.551459, -79.663629],
+    image: IB110,
+    completed: false,
+  },
+  {
+    name: "The Health Sciences Building",
+    coordinates: [43.549560,-79.662334],
+    image: HealthSciences4,
+    completed: false,
+  },
+  {
+    name: "The CCT Ice Cream Machine",
+    coordinates: [43.549579, -79.663302],
+    image: IceCreamMachine1,
+    completed: false,
+  },
+  {
+    name: "Library Starbucks",
+    coordinates: [43.551016, -79.663082],
+    image: Library_Starbucks,
+    completed: false,
+  },
+  {
+    name: "Smoke Tower",
+    coordinates: [43.551823, -79.662266],
+    image: SmokeTower1,
+    completed: false,
+  },
+  {
+    name: "Deerfield Hall",
+    coordinates: [43.550264, -79.666003],
+    image: utmdh,
+    completed: false,
   },
 ];
 
@@ -107,11 +174,11 @@ export default function Map() {
         markerElement.style.height = "50px";
         markerElement.style.backgroundSize = "cover";
         markerElement.style.borderRadius = "50%";
-        markerElement.style.border = "2px solid white";
-
+        markerElement.style.border = location.completed ? "2px solid lime" : "2px solid white";
+      
         // Create a popup that shows the location's name
         const popup = new maptilersdk.Popup({ offset: 25 }).setText(location.name);
-
+      
         // Note: The coordinates array is [lat, lng], so we swap the order to [lng, lat]
         new maptilersdk.Marker({ element: markerElement })
           .setLngLat([location.coordinates[1], location.coordinates[0]])
