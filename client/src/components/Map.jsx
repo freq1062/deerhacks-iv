@@ -40,7 +40,7 @@ const regions = [
 const locations = [
   {
     name: "Speech Bubble",
-    // Coordinates are given as [lat, lng] (we’ll swap them later)
+    // Coordinates are given as [lat, lng] (we'll swap them later)
     coordinates: [43.548458, -79.661960],
     image: SpeechBubble1,
     completed: false,
@@ -195,9 +195,13 @@ export default function Map() {
         popupContent.innerHTML = `
           <div>
             <h3>${location.name}</h3>
-            <button id="goToCameraButton">Go to Camera</button>
+            <button 
+              id="goToCameraButton" 
+              data-name="${location.name}" 
+              data-image="${location.image}"
+            >Take a Photo Here</button>
           </div>
-          `;
+        `;
         const popup = new maptilersdk.Popup({ offset: 25 }).setDOMContent(popupContent);
 
         // Note: The coordinates array is [lat, lng], so we swap the order to [lng, lat]
@@ -206,6 +210,15 @@ export default function Map() {
           .setPopup(popup)
           .addTo(map.current);
       });
+
+      document.addEventListener('click', function(event) {
+        if (event.target && event.target.id === 'goToCameraButton') {
+          const locationName = event.target.getAttribute('data-name');
+          const locationImage = event.target.getAttribute('data-image');
+          window.location.href = `/camera?name=${encodeURIComponent(locationName)}&image=${encodeURIComponent(locationImage)}`;
+        }
+      });
+
     });
   }, [tokyo.lng, tokyo.lat, zoom]);
 

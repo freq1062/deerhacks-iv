@@ -1,4 +1,4 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 async function compareImages(img1, img2) {
   try {
@@ -9,13 +9,13 @@ async function compareImages(img1, img2) {
         {
             inlineData: {
                 data: img1,
-                mimeType: "image/jpeg",
+                mimeType: "image/png",
             },
         },
         {
             inlineData: {
                 data: img2,
-                mimeType: "image/jpeg",
+                mimeType: "image/png",
             },
         },
         'Determine if the two images are taken from roughly the same spot and respond with only a boolean value.',
@@ -28,14 +28,21 @@ async function compareImages(img1, img2) {
   }
 }
 
-module.exports = { compareImages };
+export default compareImages
 
 // Test
-// const fs = require('fs');
-// const path = require('path');
-// const img1Path = path.join(__dirname, '../assets/CCT_Art.jpg');
+// import fs from 'fs';
+// import { fileURLToPath } from 'url';
+// import path from 'path';
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+// const img1Path = path.resolve(__dirname, '../assets/CCT_Art.jpg');
+// const img2Path = path.resolve(__dirname, '../assets/CCT_Ice_cream.jpg');
 // const img1Base64 = fs.readFileSync(img1Path, { encoding: 'base64' });
-// const img2Path = path.join(__dirname, '../assets/CCT_Ice_cream.jpg');
 // const img2Base64 = fs.readFileSync(img2Path, { encoding: 'base64' });
-// compareImages(img1Base64, img2Base64).then(console.log);
 
+// compareImages(img1Base64, img2Base64).then(result => {
+//   console.log("Comparison result:", result);
+// }).catch(error => {
+//   console.error("Error during comparison:", error);
+// });
