@@ -1,9 +1,8 @@
-import React, { useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import * as maptilersdk from "@maptiler/sdk";
 import "@maptiler/sdk/dist/maptiler-sdk.css";
 import "./map.css";
 
-// Import local images
 import SpeechBubble1 from "../assets/SpeechBubble1.jpeg";
 import MN_Staircase from "../assets/MN_Staircase.jpg";
 import BlindDuck1 from "../assets/BlindDuck1.jpeg";
@@ -24,10 +23,10 @@ const regions = [
       features: [
         {
           type: "Feature",
-          properties: { name: "Deerfield Hall" },
+          properties: { name: "UTM" },
           geometry: {
             type: "Point",
-            coordinates: [-79.66620530968332, 43.550466384801396],
+            coordinates: [-79.66391, 43.549455],
           },
         },
       ],
@@ -105,12 +104,22 @@ const locations = [
   },
 ];
 
-export default function Map() {
+export default function Paths() {
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const tokyo = { lat: 43.550466384801396, lng: -79.66620530968332 };
+  const deerfield = { lat: 43.549455, lng: -79.66391 };
   const zoom = 14;
+  const userLocation = useRef(null);
   maptilersdk.config.apiKey = "1Me6Sm6EB6jsGBjnCEL1";
+  const [visitedLines, setVisitedLines] = useState([]);
+  const [visitedPoints, setVisitedPoints] = useState([]);
+  const [unexploredLines, setUnexploredLines] = useState([]);
+  const [score, setScore] = useState({ total: 0, current: 0 });
+
+  let allPoints = [];
+  let allLines = [];
+  let pathList = [];
+  let pointList = {};
 
   useEffect(() => {
     if (map.current) {
@@ -120,7 +129,7 @@ export default function Map() {
     map.current = new maptilersdk.Map({
       container: mapContainer.current,
       style: maptilersdk.MapStyle.STREETS,
-      center: [tokyo.lng, tokyo.lat],
+      center: deerfield,
       zoom: zoom,
     });
 
@@ -135,7 +144,7 @@ export default function Map() {
           source: sourceId,
           type: "circle",
           paint: {
-            "circle-radius": 10,
+            "circle-radius": 100,
             "circle-color": "#007cbf",
             "circle-opacity": 0.5,
           },
@@ -144,39 +153,21 @@ export default function Map() {
         console.log("added source");
       }
 
-      //then add the layer to the map. Display the "null-island" source data
-
       map.current.on("zoom", () => {
         const zoomLevel = map.current.getZoom();
-        const newOpacity = Math.min(0.5, (15 - zoomLevel) / 2); // Opacity decreases as zoom level increases
+        const newOpacity = Math.min(0.5, (15 - zoomLevel) / 2);
 
         // Update the circle layer properties
         for (var i = 0; i < counter; i++) {
           map.current.setPaintProperty(
-            `point-${counter}`,
+            `point-${i}`,
             "circle-opacity",
             newOpacity
           );
         }
       });
 
-      map.current.getStyle().layers.forEach((layer) => {
-        // Log all of the layer ids so that we can adjust which get displayed
-        // console.log("Layer ids:", layer.id);
-        // Only adjust layers that are drawn as lines
-        if (layer.id && layer.type === "line") {
-          // For larger roads, check for "road" in the ID and set red
-          if (layer.id.includes("road") && !layer.id.includes("Path")) {
-            map.current.setPaintProperty(layer.id, "line-color", "#FF0000");
-          }
-          // For smaller paths, check for "path" in the ID and set blue
-          if (layer.id.includes("Path")) {
-            map.current.setPaintProperty(layer.id, "line-color", "#0000FF");
-          }
-        }
-      });
-
-      // Add custom markers using local images
+      // RENDER POIS
       locations.forEach((location) => {
         // Create a custom HTML element for the marker.
         const markerElement = document.createElement("div");
@@ -208,8 +199,318 @@ export default function Map() {
           .setPopup(popup)
           .addTo(map.current);
       });
+
+      // INITIALIZING PATH OBJECT
+      const features = map.current.queryRenderedFeatures();
+      const pathFeatures = features.filter((feature) =>
+        feature.layer.id.includes("Path")
+      );
+      pathFeatures.forEach((feature) => {
+        if (feature.geometry.type === "LineString") {
+          let points = feature.geometry.coordinates;
+          points.forEach((point) => {
+            const distance = Math.sqrt(
+              Math.pow(point[1] - 43.549455, 2) +
+                Math.pow(point[0] - -79.66391, 2)
+            );
+            if (distance < 0.0029) {
+              allLines.push(points);
+              pathList.push([points, Array(points.length).fill(false)]);
+              allPoints.push(...feature.geometry.coordinates);
+            }
+          });
+        } else if (feature.geometry.type === "MultiLineString") {
+          feature.geometry.coordinates.forEach((subarray) => {
+            subarray.forEach((point) => {
+              const distance = Math.sqrt(
+                Math.pow(point[1] - 43.549455, 2) +
+                  Math.pow(point[0] - -79.66391, 2)
+              );
+              if (distance < 0.0029) {
+                allLines.push(subarray);
+                pathList.push([subarray, Array(subarray.length).fill(false)]);
+                allPoints.push(...subarray);
+              }
+            });
+          });
+        }
+      });
+      pathList = pathList.filter(
+        (path, index, self) =>
+          index ===
+          self.findIndex(
+            (p) => JSON.stringify(p[0]) === JSON.stringify(path[0])
+          )
+      );
+      let onlyPathList = pathList.map((path) => path[0]);
+      setUnexploredLines(onlyPathList);
+      for (var point of allPoints) {
+        for (var line of onlyPathList) {
+          if (line.includes(point)) {
+            if (!pointList[point.toString()]) {
+              pointList[point.toString()] = [];
+            }
+            if (
+              !pointList[point.toString()].includes(onlyPathList.indexOf(line))
+            ) {
+              pointList[point.toString()].push(onlyPathList.indexOf(line));
+            }
+          }
+        }
+      }
+
+      navigator.geolocation.watchPosition(
+        //Get location of user
+        (pos) => {
+          const { latitude, longitude } = pos.coords;
+          userLocation.current = [latitude, longitude];
+        },
+        console.error
+      );
+
+      //RENDER DEFAULT LINES
+      map.current.getStyle().layers.forEach((layer) => {
+        // Skip the unexplored paths layer
+        if (layer.id === "unexplored-paths-layer") {
+          return; // Skip the current iteration if it's the unexplored paths layer
+        }
+        if (layer.id && layer.type === "line") {
+          map.current.setPaintProperty(layer.id, "line-color", "#678fcf");
+          map.current.setPaintProperty(layer.id, "line-width", 2);
+        }
+      });
+      setScore({ total: Object.keys(pointList).length, current: 0 });
+      setInterval(updateVisitedPaths, 2000);
     });
-  }, [tokyo.lng, tokyo.lat, zoom]);
+  }, [zoom]);
+
+  useEffect(() => {
+    if (visitedLines.length > 0) {
+      const pathGeoJSON = {
+        type: "FeatureCollection",
+        features: visitedLines.map((path) => ({
+          type: "Feature",
+          geometry: {
+            type: "LineString",
+            coordinates: path,
+          },
+          properties: {},
+        })),
+      };
+
+      const visitedPointsGeoJSON = {
+        //idk how to show the points, nothing worked
+        type: "FeatureCollection",
+        features:
+          // visitedPoints.map((point) => ({
+          //   type: "Feature",
+          //   geometry: {
+          //     type: "LineString",
+          //     coordinates: point,
+          //   },
+          //   properties: {},
+          // })),
+
+          visitedPoints.map((point) => ({
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: point,
+            },
+          })),
+      };
+
+      const unexploredPathsGeoJSON = {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              geometry: {
+                type: "MultiLineString", // Use LineString if you're rendering lines
+                coordinates: unexploredLines, // Ensure this is an array of [lng, lat] pairs
+              },
+            },
+          ],
+        },
+      };
+
+      if (map.current.getSource("visited")) {
+        // If the source exists, just update the data
+        map.current.getSource("visited").setData(pathGeoJSON);
+      } else {
+        // Otherwise, add the source and layer
+        map.current.addSource("visited", {
+          type: "geojson",
+          data: pathGeoJSON,
+        });
+      }
+
+      if (map.current.getSource("visited-source")) {
+        map.current.getSource("visited-source").setData(visitedPointsGeoJSON);
+      } else {
+        map.current.addSource("visited-source", {
+          type: "geojson",
+          data: visitedPointsGeoJSON,
+        });
+      }
+
+      if (map.current.getLayer("unexplored-paths-layer")) {
+        map.current
+          .getSource("unexplored-paths-source")
+          .setData(unexploredPathsGeoJSON);
+      } else {
+        map.current.addSource(
+          "unexplored-paths-source",
+          unexploredPathsGeoJSON
+        );
+      }
+
+      map.current.addLayer({
+        id: "unexplored-paths-layer",
+        type: "line", // Use "line" for paths
+        source: "unexplored-paths-source", // Match the source ID
+        layout: {
+          "line-join": "round",
+          "line-cap": "round",
+        },
+        paint: {
+          "line-color": "#ff0000", // Line color
+          "line-width": 3, // Line width
+        },
+      });
+
+      map.current.addLayer({
+        id: "visited-points",
+        type: "circle",
+        source: "visited-points-source",
+        paint: {
+          "circle-radius": 100,
+          "circle-color": "#1c632f",
+          "circle-opacity": 0.8,
+        },
+      });
+
+      map.current.addLayer({
+        id: "visited-paths-layer",
+        type: "line",
+        source: "visited",
+        layout: {
+          "line-join": "round",
+          "line-cap": "round",
+        },
+        paint: {
+          "line-color": "#13d470",
+          "line-width": 3,
+        },
+      });
+
+      map.current.on("zoom", () => {
+        const zoomLevel = map.current.getZoom();
+        const newOpacity = zoomLevel - 14;
+
+        // Update the circle layer properties
+        map.current.setPaintProperty(
+          `visited-paths-layer`,
+          "line-opacity",
+          newOpacity
+        );
+        map.current.setPaintProperty(
+          `unexplored-paths-layer`,
+          "line-opacity",
+          newOpacity
+        );
+      });
+    }
+    setScore((prevScore) => ({ ...prevScore, current: visitedPoints.length }));
+  }, [unexploredLines, visitedLines, visitedPoints]);
+
+  useEffect(() => {
+    console.log(score);
+  }, [score]);
+
+  function haversineDistance(coord1, coord2) {
+    const [lat1, lon1] = coord1;
+    const [lat2, lon2] = coord2;
+
+    const R = 6371e3; // Radius of the Earth in meters
+    const φ1 = (lat1 * Math.PI) / 180; // φ, λ in radians
+    const φ2 = (lat2 * Math.PI) / 180;
+    const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+    const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+
+    const a =
+      Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    const distance = R * c; // in meters
+    return distance;
+  }
+
+  function updateVisitedPaths() {
+    if (!userLocation.current) return;
+
+    const [userLat, userLon] = userLocation.current;
+    const nearbyPoints = [];
+
+    Object.keys(pointList).forEach((key) => {
+      const distance = haversineDistance(
+        // [userLat, userLon],
+        [-79.66554522514343, 43.54921296911567],
+        key.split(",").map(Number)
+      );
+      if (distance < 200) {
+        nearbyPoints.push({ key, indexes: pointList[key] });
+        setVisitedPoints((prevVisitedPoints) => {
+          const newPoint = key.split(",").map(Number);
+
+          // Check if the new point already exists in the visitedPoints array
+          const pointExists = prevVisitedPoints.some(
+            (point) => JSON.stringify(point) === JSON.stringify(newPoint)
+          );
+
+          // Only add the point if it's unique
+          if (!pointExists) {
+            return [...prevVisitedPoints, newPoint];
+          } else {
+            return prevVisitedPoints; // No change if the point is not unique
+          }
+        });
+      }
+    });
+
+    if (nearbyPoints.length === 0) return;
+    nearbyPoints.forEach(({ key, indexes }) => {
+      indexes.forEach((index) => {
+        const [line, visitedArray] = pathList[index];
+        let pointIndex = 0;
+        for (var i = 0; i < line.length; i++) {
+          if (
+            // WE HAVE TO USE THIS THING TO COMPARE EQUALITY
+            JSON.stringify(key.split(",").map(Number)) ===
+            JSON.stringify(line[i])
+          ) {
+            pointIndex = i;
+            break;
+          }
+        }
+        if (pointIndex !== -1 && !visitedArray[pointIndex]) {
+          visitedArray[pointIndex] = true;
+
+          if (visitedArray.every((v) => v)) {
+            if (!visitedLines.includes(line)) {
+              setVisitedLines((prevVisitedLines) => [
+                ...prevVisitedLines,
+                line,
+              ]);
+            }
+          }
+        }
+      });
+    });
+  }
 
   return <div ref={mapContainer} className="map" />;
 }
