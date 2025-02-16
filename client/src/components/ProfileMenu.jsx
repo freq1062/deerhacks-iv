@@ -6,9 +6,7 @@ const ProfileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logout } = useUser();
 
-  // Calculate statistics based on completed tasks
   const calculateStats = () => {
-    const completedTasks = user.tasks?.filter(task => task.isCompleted) || [];
     const points = user.points || 0;
     const distance = user.totalDistance || 0;
     
@@ -26,15 +24,20 @@ const ProfileMenu = () => {
     setIsOpen(false);
   };
 
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+    console.log('Menu toggled:', !isOpen); // Debug log
+  };
+
   return (
-    <div className="relative" style={{ zIndex: 1000 }}>
+    <div className="relative" style={{ zIndex: 9999 }}>
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow-sm hover:bg-gray-50"
-        style={{ minWidth: '120px' }}
+        onClick={toggleMenu}
+        className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none"
+        type="button"
       >
         <User size={20} />
-        <span>{user.username || 'Profile'}</span>
+        <span className="text-sm font-medium">{user.username || 'Profile'}</span>
         <ChevronDown 
           size={16} 
           className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`}
@@ -43,32 +46,33 @@ const ProfileMenu = () => {
 
       {isOpen && (
         <div 
-          className="absolute right-0 bottom-full mb-2 w-64 bg-white rounded-lg shadow-lg p-4"
-          style={{ minWidth: '200px' }}
+          className="absolute right-0 translate-y-[-100%] w-64 bg-white rounded-lg shadow-lg p-4"
+          style={{ 
+            bottom: '60px', // Adjust based on your navbar height
+            zIndex: 9999,
+            minWidth: '250px',
+            border: '1px solid #e5e7eb'
+          }}
         >
           <div className="space-y-4">
             <div className="text-lg font-semibold border-b pb-2">
               {user.username || 'User Profile'}
             </div>
             
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex flex-col items-center gap-1">
                 <Award className="text-yellow-500" size={20} />
-                <div>
-                  <div className="text-sm text-gray-600">Points</div>
-                  <div className="font-medium">{stats.points}</div>
-                </div>
+                <div className="text-xs text-gray-600">Points</div>
+                <div className="font-medium text-sm">{stats.points}</div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-center gap-1">
                 <MapPin className="text-blue-500" size={20} />
-                <div>
-                  <div className="text-sm text-gray-600">Locations Found</div>
-                  <div className="font-medium">{stats.locationsFound}</div>
-                </div>
+                <div className="text-xs text-gray-600">Found</div>
+                <div className="font-medium text-sm">{stats.locationsFound}</div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-center gap-1">
                 <svg 
                   className="text-green-500" 
                   width="20" 
@@ -80,10 +84,8 @@ const ProfileMenu = () => {
                 >
                   <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                 </svg>
-                <div>
-                  <div className="text-sm text-gray-600">Distance Traveled</div>
-                  <div className="font-medium">{stats.distanceTraveled.toFixed(1)} km</div>
-                </div>
+                <div className="text-xs text-gray-600">Distance</div>
+                <div className="font-medium text-sm">{stats.distanceTraveled.toFixed(1)}km</div>
               </div>
             </div>
 

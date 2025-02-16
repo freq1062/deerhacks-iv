@@ -1,9 +1,7 @@
 .map {
-  position: absolute;
+  position: absolute;  /* Change from fixed to absolute */
+  width: 100%;
+  height: calc(100vh - 64px);  /* Subtract navbar height */
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
 }
-/* get rid of the watermarks lmao*/
