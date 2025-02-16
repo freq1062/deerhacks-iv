@@ -13,6 +13,11 @@ export default function NavBar() {
     visitedLocations: [],
   };
 
+  // Conditionally render the navbar, ensuring it's not displayed on the login page
+  if (!user.isLoggedIn) {
+    return null; // This hides the navbar when the user is not logged in
+  }
+
   return (
     <nav
       className="nav"

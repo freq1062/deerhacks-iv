@@ -4,6 +4,7 @@ body {
   padding: 0;
   overflow-x: hidden;
   font-family: 'Roboto', sans-serif;
+  background: black;
 }
 
 nav {
@@ -75,4 +76,11 @@ main {
 .relative {
   position: relative;
   z-index: 51; /* Ensure elements appear on top of the navbar */
+}
+
+.leaderboard {
+  background: black;
+  color: white;
+  text-align: center;
+  margin-left: 6px;
 }

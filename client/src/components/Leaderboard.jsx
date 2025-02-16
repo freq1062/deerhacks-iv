@@ -115,7 +115,7 @@ const Leaderboard = () => {
 
   return (
     <div
-      className="container mx-auto px-4 py-8 pb-20"
+      className="leaderboard"
       style={{ maxWidth: "800px", minHeight: "100vh" }}
     >
       <h2 className="text-2xl font-bold mb-6 text-center">Leaderboard</h2>
@@ -155,6 +155,7 @@ const Leaderboard = () => {
                 Distance
               </th>
             </tr>
+            <br></br>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {leaderboardData.map((player) => (
