@@ -1,5 +1,5 @@
 # deerhacks-iv
-Deerhacks IV Project
+# Real-Playing Game (Deerhacks IV Project)
 
 ## Inspiration
 Our Real-Playing Game was inspired by an annoyance we have here at UTM: despite most of us being enrolled for over a semester, it still feels like we do not fully know the campus. UTM has a strong argument for being the most beautiful of all the University of Toronto campuses, with modern buildings and incredible nature trails. However, this remains useless if we do not seek out new places and instead just follow our daily routine going between classes. We wanted to make this app to ensure we make the most of our short stint here at UTM. While our initial goal was to make the most out of our short time at UTM by getting to know the campus, we later realized that the Real-Playing Game could also help us explore other places, such as the other campuses or even Toronto as a whole.
