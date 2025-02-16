@@ -40,7 +40,7 @@ export default compareImages
 // const img1Path = path.resolve(__dirname, '../assets/CCT_Art.jpg');
 // const img2Path = path.resolve(__dirname, '../assets/CCT_Ice_cream.jpg');
 // const img1Base64 = fs.readFileSync(img1Path, { encoding: 'base64' });
-// const img2Base64 = fs.readFileSync(img2Path, { encoding: 'base64' });
+// const img2Base64 = fs.readFileSync(img1Path, { encoding: 'base64' });
 
 // compareImages(img1Base64, img2Base64).then(result => {
 //   console.log("Comparison result:", result);

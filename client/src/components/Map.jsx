@@ -3,6 +3,7 @@ import * as maptilersdk from "@maptiler/sdk";
 import "@maptiler/sdk/dist/maptiler-sdk.css";
 import "./map.css";
 import { usePaths } from "./PathProvider";
+import { useUser } from "../context/UserContext";
 
 import SpeechBubble1 from "../assets/SpeechBubble1.jpeg";
 import MN_Staircase from "../assets/MN_Staircase.jpg";
@@ -121,6 +122,7 @@ export default function Paths() {
     setUnexploredLines,
   } = usePaths();
   const [score, setScore] = useState({ total: 0, current: 0 });
+  const { user, updateUserLocation } = useUser();
 
   let allPoints = [];
   let allLines = [];
@@ -304,6 +306,10 @@ export default function Paths() {
           properties: {},
         })),
       };
+
+      if (user.isLoggedIn) {
+        updateUserLocation(score.current);
+      }
 
       const visitedPointsGeoJSON = {
         //idk how to show the points, nothing worked

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Camera.css"; // Import the CSS file
+import { useUser } from "../context/UserContext";
 import compareImages from "../data/compareImages";
 
 import MN_Staircase from "../assets/MN_Staircase.jpg";
@@ -21,6 +22,7 @@ export default function Camera({ onPhotoTaken }) {
   const [base64Images, setBase64Images] = useState([]);
   const imageArray = [MN_Staircase, utmdh];
   const found = ["MN Staircase", "Deerfield Hall"];
+  const { user, addVisitedLocation } = useUser();
 
   useEffect(() => {
     console.log("Got here");
@@ -59,21 +61,40 @@ export default function Camera({ onPhotoTaken }) {
     if (onPhotoTaken) {
       onPhotoTaken(dataUrl);
     }
-    let any = false;
-    for (var i = 0; i < base64Images.length; i++) {
-      compareImages(base64Images[i].split(",")[1], dataUrl.split(",")[1]).then(
-        (result) => {
-          console.log("Comparison result:", result);
+    async function compareAllImages() {
+      let promises = []; // Array to store the promises
+      let foundItems = []; // To store items that are found
+
+      for (var i = 0; i < base64Images.length; i++) {
+        // Create a new promise for each image comparison
+        let promise = compareImages(
+          base64Images[i].split(",")[1],
+          base64Images[i].split(",")[1]
+        ).then((result) => {
           if (result) {
-            alert("You found " + found[i] + "!");
-            any = true;
+            foundItems.push(found[i - 1]); // Store found item if the result is true
           }
+        });
+
+        promises.push(promise); // Add the promise to the array
+      }
+
+      // Wait for all promises to finish
+      await Promise.all(promises);
+
+      // Once all are done, log the found items
+      if (foundItems.length > 0) {
+        if (user.isLoggedIn) {
+          addVisitedLocation(foundItems[0]);
         }
-      );
+        alert("You found: " + foundItems[0]);
+      } else {
+        alert("No items found.");
+      }
     }
-    if (!any) {
-      alert("No match found");
-    }
+
+    // Call the function
+    compareAllImages();
   };
 
   return (
