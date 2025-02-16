@@ -15,10 +15,11 @@ export default function NavBar() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200"
-      style={{ zIndex: 1000 }}
+      className="nav"
+      style={{ zIndex: 1000, border: "1px solid black" }}
+      id="navbar"
     >
-      <div className="max-w-screen-xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div className="profile-menu">
         <div className="flex gap-4">
           <Link to="/" className="link">
             Map
@@ -35,7 +36,7 @@ export default function NavBar() {
         </div>
         <div className="user-info">
           <ProfileMenu userData={mockUserData} />
-          <p>Score: {user.completion}%</p>
+          <p>Percent Walked: {user.completion}%</p>
         </div>
       </div>
     </nav>

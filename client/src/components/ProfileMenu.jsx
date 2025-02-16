@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { User, MapPin, Award, ChevronDown, LogOut } from 'lucide-react';
-import { useUser } from '../context/UserContext';
+import React, { useState } from "react";
+import { User, MapPin, Award, ChevronDown, LogOut } from "lucide-react";
+import { useUser } from "../context/UserContext";
 
 const ProfileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,7 +9,7 @@ const ProfileMenu = () => {
   const calculateStats = () => {
     const points = user.points || 0;
     const distance = user.totalDistance || 0;
-    
+
     return {
       points,
       locationsFound: user.visitedLocations?.length || 0,
@@ -25,8 +25,18 @@ const ProfileMenu = () => {
   };
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
-    console.log('Menu toggled:', !isOpen); // Debug log
+    setIsOpen(!isOpen); // Toggle the menu state
+    console.log("Menu toggled:", !isOpen); // Debug log
+
+    const navbar = document.getElementById("navbar");
+
+    if (!isOpen) {
+      // If the menu is opening, set the height to 10rem
+      navbar.style.height = "20rem";
+    } else {
+      // If the menu is closing, set the height to a smaller value or zero
+      navbar.style.height = "4.8rem"; // Adjust as needed
+    }
   };
 
   return (
@@ -37,28 +47,32 @@ const ProfileMenu = () => {
         type="button"
       >
         <User size={20} />
-        <span className="text-sm font-medium">{user.username || 'Profile'}</span>
-        <ChevronDown 
-          size={16} 
-          className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`}
+        <span className="text-sm font-medium">
+          {user.username || "Profile"}
+        </span>
+        <ChevronDown
+          size={16}
+          className={`transform transition-transform ${
+            isOpen ? "rotate-180" : ""
+          }`}
         />
       </button>
 
       {isOpen && (
-        <div 
+        <div
           className="absolute right-0 translate-y-[-100%] w-64 bg-white rounded-lg shadow-lg p-4"
-          style={{ 
-            bottom: '60px', // Adjust based on your navbar height
+          style={{
+            bottom: "60px", // Adjust based on your navbar height
             zIndex: 9999,
-            minWidth: '250px',
-            border: '1px solid #e5e7eb'
+            minWidth: "250px",
+            border: "1px solid #e5e7eb",
           }}
         >
           <div className="space-y-4">
             <div className="text-lg font-semibold border-b pb-2">
-              {user.username || 'User Profile'}
+              {user.username || "User Profile"}
             </div>
-            
+
             <div className="grid grid-cols-3 gap-4">
               <div className="flex flex-col items-center gap-1">
                 <Award className="text-yellow-500" size={20} />
@@ -69,23 +83,27 @@ const ProfileMenu = () => {
               <div className="flex flex-col items-center gap-1">
                 <MapPin className="text-blue-500" size={20} />
                 <div className="text-xs text-gray-600">Found</div>
-                <div className="font-medium text-sm">{stats.locationsFound}</div>
+                <div className="font-medium text-sm">
+                  {stats.locationsFound}
+                </div>
               </div>
 
               <div className="flex flex-col items-center gap-1">
-                <svg 
-                  className="text-green-500" 
-                  width="20" 
-                  height="20" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
+                <svg
+                  className="text-green-500"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
                   strokeWidth="2"
                 >
                   <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                 </svg>
                 <div className="text-xs text-gray-600">Distance</div>
-                <div className="font-medium text-sm">{stats.distanceTraveled.toFixed(1)}km</div>
+                <div className="font-medium text-sm">
+                  {stats.distanceTraveled.toFixed(1)}km
+                </div>
               </div>
             </div>
 
